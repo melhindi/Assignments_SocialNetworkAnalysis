@@ -23,23 +23,28 @@ if __name__ == "__main__":
     logging.info(str(gu.summary()))
     d = gu.diameter(directed=False, unconn=True)
     logging.info("Diameter: "+str(d))
-    
-    b = gu.edge_betweenness(directed=False)
+
+    b = gu.betweenness()
     m = max(b)
     logging.info("Highest betweenness centrality: "+str(m))
     top_nodes = [i for i, j in enumerate(b) if j == m]
-    logging.info("following nodes [ids] have the above centrality:\n"+str(top_nodes))
+    logging.info("following nodes [ids] have the above centrality:")
+    logString = ""
+    for i in top_nodes:
+        logString += "Node name: " + str(gu.vs[i]["name"]) + " id: " + str(i)
+    logging.info(logString)
 
     t = gd.triad_census()["300"]
     logging.info("The number of triads is: "+str(t))
     cc = gu.transitivity_undirected(mode="nan")
     logging.info("Global Clustering Coefficient: "+str(cc))
-    dd = g.degree_distribution()
-    #logging.info(str(dd))
-    #ddd = g.degree()
-    #logging.info(str(ddd))
-    xs, ys = zip(*[(left, count) for left, _, count in dd.bins()])
-    result = power_law_fit(ys)
-    logging.info(str(result))
-    #pylab.bar(xs, ys)
-    #pylab.show()
+
+    ddd = gu.degree()
+    #logging.info("Degrees:\n" + str(ddd))
+
+    result = power_law_fit(ddd)
+    logging.info("Results of igraph powerlaw fitter: \n"+str(result))
+
+    import powerlaw
+    results = powerlaw.Fit(ddd)
+    logging.info("Results of powerlaw package fitter:\nalpha: "+str(results.alpha)+ " xmin: "+ str(results.xmin))
