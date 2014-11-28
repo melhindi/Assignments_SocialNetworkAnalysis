@@ -50,7 +50,7 @@ def pref_attach_graph(G, t, m):
 
 if __name__ == "__main__":
     num_vertices = 5
-    print "Problem 1a: "
+    print "\nProblem 1a: "
     g = generate_full_graph(num_vertices)
     t = 100
     m = 3
@@ -64,7 +64,7 @@ if __name__ == "__main__":
     #(iii) the sum of the vertex degrees
     print ("Sum of vertex degrees %i" % (sum(g1a.degree())))
 
-    print "Problem 1b: "
+    print "\nProblem 1b: "
     t = 1000
     m = 4
 
@@ -72,10 +72,10 @@ if __name__ == "__main__":
 
     #(ai) the number of vertices
     V = len(g1b.vs)
-    print ("Number of vertices %i" % (V))
+    print ("Number of vertices %i" % V)
     #(aii) the number of edges
     E = len(g1b.es)
-    print ("Number of edges %i" % (E))
+    print ("Number of edges %i" % E)
     #(aiii) the sum of the vertex degrees
     print ("Sum of vertex degrees %i" % (sum(g1b.degree())))
 
@@ -94,9 +94,9 @@ if __name__ == "__main__":
     aagl = math.log(V)/math.log(math.log(V))
 
     print ("Global Clustering Coefficient")
-    print ("iGraph \t \t analytical")
-    print ("%f \t %f" % (icc, acc))
+    print ("iGraph\t\tanalytical")
+    print ("%f\t%f" % (icc, acc))
 
     print ("Average Path Length")
-    print ("iGraph \t \t analytical")
-    print ("%f \t %f" % (iagl, aagl ))
+    print ("iGraph\t\tanalytical")
+    print ("%f\t%f" % (iagl, aagl ))
