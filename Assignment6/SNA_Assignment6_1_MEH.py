@@ -53,8 +53,9 @@ def perform_spectral_clustering_onLaplacian(laplacian, k, num_vectors_kMeans=3, 
     eigenVectors = eigenVectors[:, idx] #sort eigenvectors
 
     clustering_eigenValues_index = []
+    # Prepare to pick num_vectors_kMeans smallest eigenvalues
     if (considerZeroEigenvalues):
-        clustering_eigenValues_index = range(0,num_vectors_kMeans+1)
+        clustering_eigenValues_index = range(num_vectors_kMeans) #0,...,num_vectors_kMeans-1
     else:
         index = 0
         while len(clustering_eigenValues_index) < num_vectors_kMeans and index < len(eigenValues):
@@ -69,6 +70,8 @@ def perform_spectral_clustering_onLaplacian(laplacian, k, num_vectors_kMeans=3, 
     logging.debug("EigenVectors")
     logging.debug(eigenVectors)
 
+    print "debug"
+    print clustering_eigenValues_index
     data = eigenVectors[:, clustering_eigenValues_index]
 
     logging.info("Top %i eigenvectors used for clustering" % num_vectors_kMeans)
