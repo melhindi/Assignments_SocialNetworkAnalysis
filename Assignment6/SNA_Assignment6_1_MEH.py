@@ -31,7 +31,7 @@ def perform_spectral_clustering_onGraph(graph, k, normalized=True, num_vectors_k
     return perform_spectral_clustering_onLaplacian(laplacian, k)
 
 
-def perform_spectral_clustering_onLaplacian(laplacian, k, num_vectors_kMeans=3):
+def perform_spectral_clustering_onLaplacian(laplacian, k, num_vectors_kMeans=3, considerZeroEigenvalues=False):
     """
     Performs spectral clustering based on a given graph laplacian passed as numpy array
 
@@ -47,16 +47,20 @@ def perform_spectral_clustering_onLaplacian(laplacian, k, num_vectors_kMeans=3):
 
     eigenValues, eigenVectors = np.linalg.eig(laplacian)
 
-    idx = eigenValues.argsort()
-    eigenValues = eigenValues[idx]
-    eigenVectors = eigenVectors[:, idx]
+    #Sort eigenvalues ascending
+    idx = eigenValues.argsort() # this returns the indexes of the values
+    eigenValues = eigenValues[idx] # sort eigenvalues
+    eigenVectors = eigenVectors[:, idx] #sort eigenvectors
 
     clustering_eigenValues_index = []
-    index = 0
-    while len(clustering_eigenValues_index) < num_vectors_kMeans and index < len(eigenValues):
-        if eigenValues[index] >= 1e-10:
-            clustering_eigenValues_index.append(index)
-        index += 1
+    if (considerZeroEigenvalues):
+        clustering_eigenValues_index = range(0,num_vectors_kMeans+1)
+    else:
+        index = 0
+        while len(clustering_eigenValues_index) < num_vectors_kMeans and index < len(eigenValues):
+            if eigenValues[index] >= 1e-10:
+                clustering_eigenValues_index.append(index)
+            index += 1
 
     logging.debug("Normalized Graph Laplacian")
     logging.debug(laplacian)
@@ -127,7 +131,7 @@ def perform_evolutionary_clustering(graph, prev_membership_matrix, alpha, k):
     mm_transposed = np.transpose(prev_membership_matrix)
     L_hat = laplacian_hat - (1 - alpha) * prev_membership_matrix.dot(mm_transposed)
 
-    return perform_spectral_clustering_onLaplacian(L_hat, k)
+    return perform_spectral_clustering_onLaplacian(L_hat, k,considerZeroEigenvalues=True)
 
 
 if __name__ == "__main__":
